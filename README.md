@@ -53,7 +53,7 @@ Follow these steps to run Ruah on your local machine:
 3.  **Generate the Database** 🛠️
     *Crucial Step:* Run the included script to download and compile the Gospels into a local JSON file.
     ```bash
-    node generar-biblia.js
+    node bible-generator.js
     ```
 
 4.  **Run the App**

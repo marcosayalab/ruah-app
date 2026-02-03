@@ -53,7 +53,7 @@ Sigue estos pasos para ejecutar Ruah en tu ordenador:
 3.  **Genera la Base de Datos** 🛠️
     *Paso crucial:* Ejecuta el script incluido para descargar y compilar los Evangelios en un archivo JSON local.
     ```bash
-    node generar-biblia.js
+    node bible-generator.js
     ```
 
 4.  **Ejecuta la App**
