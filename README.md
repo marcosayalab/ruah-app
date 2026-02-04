@@ -2,46 +2,47 @@
 
 > "The wind blows where it wishes, and you hear its sound, but you do not know where it comes from or where it goes. So it is with everyone who is born of the Spirit." — John 3:8
 
-[![🇪🇸 Leer en Español](https://img.shields.io/badge/Lang-Español-red)](README_Spanish.md)
+[![🇪🇸 Leer en Español](https://img.shields.io/badge/Lang-Español-red)](README.es.md)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Data](https://img.shields.io/badge/Data-Static%20JSON-orange)
 
-**Ruah** is a minimalist web application designed to offer a moment of reflection through the random reading of the Gospels. Inspired by the ancient practice of *Lectio Divina* and the concept of serendipity—or Providence—it allows the user to "open the book" at a random page to receive a message.
+**Ruah** is a minimalist web application designed to offer a moment of reflection through the random reading of the Gospels. Inspired by the concept of Divine Providence, it allows the user to "open the book" at a random page to receive a message.
 
-## 📖 What is Ruah?
+## 📖 Architecture & How it Works
 
-**Ruah** (רוּחַ) is a Hebrew word meaning "breath," "wind," or "spirit."
+Unlike traditional apps that fetch data from an API every time a user clicks a button (causing loading times), **Ruah** is built for **speed and offline capability**.
 
-In the biblical context, it represents the creative power of God and the Holy Spirit. The app takes this concept to the digital realm: just as the wind blows where it wills, the application selects a chapter from the Gospels (Matthew, Mark, Luke, or John) completely at random. There is no algorithm based on preferences, only pure randomness, inviting the user to find meaning in the unexpected.
+1.  **Data Generation:** We use a custom Node.js script (`bible-generator.js`) that fetches the Gospels from an external API during the development phase.
+2.  **Static Database:** The script compiles the 89 chapters of the Gospels into local JSON files (`gospels.json` and `gospels-en.json`).
+3.  **Instant Rendering:** React loads this data into memory. When deployed to Vercel/Netlify, the app acts as a Static Site with a pre-built "mini-database," ensuring zero network latency for the user.
 
-## ✨ Features
+## 🛠️ The Generator Script
 
-* **True Randomness:** Selects a chapter from the 4 Gospels (89 chapters total).
-* **Instant Load:** Uses a local optimized JSON database (no API latency).
-* **Zero Distractions:** Minimalist interface focused solely on the text.
-* **Offline Ready:** Designed to work without an internet connection (Perfect for commuting or retreats).
+The project includes `bible-generator.js`. You typically only need to run this once to build the JSON files.
 
-## 📜 The Source: Reina Valera 1909
+* **API Used:** [Bolls.life](https://bolls.life/) (Open source Bible API).
+* **Note on Execution:** When running the script, you might see connection warnings or timeouts depending on the API load. However, the script is robust: as long as the `.json` files are created in `src/data`, the process is successful.
 
-This project uses the text of the **Reina Valera 1909** Bible.
+## 🌍 Multilingual Support
 
-* **Why this version?** It is in the **Public Domain** worldwide.
-* **The Beauty of the Text:** It retains a classic, solemn, and poetic Spanish style that invites reverence and deep reading, avoiding modern copyright restrictions.
+Ruah is fully bilingual. It currently supports:
+* **Spanish:** Reina-Valera Version (RV).
+* **English:** King James Version (KJV).
+
+The user can toggle between languages instantly without reloading the page.
+
+## 📜 Disclaimer & Copyright
+
+This project is for **educational and non-profit purposes**.
+* The English text (KJV) is in the Public Domain.
+* The Spanish text is provided via the [Bolls.life API](https://bolls.life/). All rights regarding specific translations belong to their respective owners.
 
 ## 🚀 Getting Started
 
-Follow these steps to run Ruah on your local machine:
-
-### Prerequisites
-* Node.js (v14 or higher)
-* npm
-
-### Installation
-
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/tu-usuario/ruah-app.git](https://github.com/tu-usuario/ruah-app.git)
+    git clone [https://github.com/your-username/ruah-app.git](https://github.com/your-username/ruah-app.git)
     cd ruah-app
     ```
 
@@ -50,8 +51,8 @@ Follow these steps to run Ruah on your local machine:
     npm install
     ```
 
-3.  **Generate the Database** 🛠️
-    *Crucial Step:* Run the included script to download and compile the Gospels into a local JSON file.
+3.  **Check Database**
+    Ensure `src/data/gospels.json` exists. If not, generate the data:
     ```bash
     node bible-generator.js
     ```
@@ -60,20 +61,7 @@ Follow these steps to run Ruah on your local machine:
     ```bash
     npm run dev
     ```
-    Open your browser at `http://localhost:5173`
-
-## 🔮 Roadmap & Ideas
-
-* [ ] **PWA (Progressive Web App):** Make it installable on mobile phones.
-* [ ] **Dark Mode:** For night reading.
-* [ ] **"Share" Button:** Generate an image or text to share the chapter.
-* [ ] **Lectio Divina Mode:** A guided timer for reading, meditation, and prayer.
-
-## 🤝 Contributing
-
-This is an open-source project. If you want to improve the code or suggest features, feel free to open a PR!
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
-The Biblical text (RVR1909) is in the Public Domain.
+This project is licensed under the MIT License.
