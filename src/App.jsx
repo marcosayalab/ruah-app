@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useRandomGospel } from './hooks/useRandomGospel';
 import './App.css';
 import logoSvg from '/ruah.svg';
+import InfoPanel from './components/InfoPanel';
 
 function App() {
   const {
@@ -10,6 +12,8 @@ function App() {
     getRandomGospel,
     changeLanguage,
   } = useRandomGospel('es');
+
+  const [showInfo, setShowInfo] = useState(false);
 
   const texts = {
     es: {
@@ -52,6 +56,7 @@ function App() {
             EN
           </button>
         </div>
+        <button className="info-button" onClick={() => setShowInfo(true)} aria-label="About Ruah">i</button>
       </header>
 
       {/* Main Content */}
@@ -95,6 +100,9 @@ function App() {
       <footer className="footer">
         <p>{t.footer}</p>
       </footer>
+      {showInfo && (
+        <InfoPanel language={language} onClose={() => setShowInfo(false)} />
+      )}
     </div>
   );
 }
