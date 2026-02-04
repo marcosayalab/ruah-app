@@ -1,42 +1,294 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* ===== Variables ===== */
+:root {
+  --color-bg: #faf8f5;
+  --color-text: #2c2c2c;
+  --color-text-muted: #6b6b6b;
+  --color-accent: #8b7355;
+  --color-accent-hover: #6d5a45;
+  --color-card-bg: #ffffff;
+  --color-border: #e8e4df;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --transition: all 0.3s ease;
+}
+
+/* ===== App Container ===== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-@keyframes logo-spin {
+.logo-img {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+}
+
+.language-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lang-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.lang-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.lang-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+/* ===== Main Content ===== */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ===== Intro Section ===== */
+.intro {
+  text-align: center;
+  max-width: 600px;
+  animation: fadeIn 0.6s ease;
+}
+
+.tagline {
+  margin: 0 0 3rem 0;
+  padding: 0;
+  border: none;
+}
+
+.tagline p {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--color-text);
+  margin: 0 0 1rem 0;
+}
+
+.tagline cite {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-style: normal;
+  color: var(--color-text-muted);
+}
+
+/* ===== Action Button ===== */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2rem;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-soft);
+}
+
+.action-btn:hover {
+  background: var(--color-accent-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  box-shadow: none;
+  margin-top: 2rem;
+}
+
+.action-btn.secondary:hover {
+  background: var(--color-accent);
+  color: white;
+}
+
+.btn-icon {
+  font-size: 1.3rem;
+}
+
+/* ===== Gospel Section ===== */
+.gospel-section {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.gospel-card {
+  width: 100%;
+  background: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.gospel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  color: white;
+}
+
+.gospel-book {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.gospel-chapter {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.gospel-text {
+  padding: 2rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.gospel-text p {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  line-height: 2;
+  text-align: justify;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.gospel-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  text-align: right;
+}
+
+.verse-count {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== Footer ===== */
+.footer {
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* ===== Scrollbar ===== */
+.gospel-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gospel-text::-webkit-scrollbar-track {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.gospel-text::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.5rem;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .logo {
+    font-size: 1.5rem;
+  }
 
-.read-the-docs {
-  color: #888;
+  .tagline p {
+    font-size: 1.2rem;
+  }
+
+  .main {
+    padding: 1.5rem;
+  }
+
+  .gospel-text {
+    padding: 1.5rem;
+  }
+
+  .gospel-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
 }
