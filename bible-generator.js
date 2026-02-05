@@ -1,26 +1,24 @@
 import fs from 'fs';
 import https from 'https';
+// Import the library you just installed
+import { Bible } from 'biblia-de-jerusalen'; 
 
-// --- CONFIGURACIÓN MAESTRA ---
+// --- CONFIGURATION ---
 const OUTPUT_DIR = './src/data';
 
-// Trabajos que tiene que hacer el script
 const JOBS = [
   {
-    language: "ESPAÑOL",
-    versionApi: "RV1960", 
-    filename: "./src/data/gospels-es.json", // Nombre específico para Español
-    books: [
-      { id: 40, name: "Mateo",  chapters: 28 },
-      { id: 41, name: "Marcos", chapters: 16 },
-      { id: 42, name: "Lucas",  chapters: 24 },
-      { id: 43, name: "Juan",   chapters: 21 }
-    ]
+    language: "ESPAÑOL (Biblia de Jerusalén)",
+    mode: "NPM_LIBRARY", // New mode to use the library
+    filename: "./src/data/gospels-es.json",
+    // Exact names to search for in the library
+    targetBooks: ["Mateo", "Marcos", "Lucas", "Juan"] 
   },
   {
-    language: "ENGLISH",
-    versionApi: "KJV", 
-    filename: "./src/data/gospels-en.json", // Nombre específico para Inglés
+    language: "ENGLISH (King James)",
+    mode: "API",
+    versionApi: "KJV",
+    filename: "./src/data/gospels-en.json",
     books: [
       { id: 40, name: "Matthew",  chapters: 28 },
       { id: 41, name: "Mark",     chapters: 16 },
@@ -30,89 +28,138 @@ const JOBS = [
   }
 ];
 
-// Helper: Fetch a single chapter
-const fetchChapter = (version, bookId, chapter) => {
+// --- 1. FUNCTION FOR API (English KJV) ---
+const fetchChapterFromApi = (version, bookId, chapter) => {
   return new Promise((resolve, reject) => {
-    // La URL es dinámica según la versión
     const url = `https://bolls.life/get-text/${version}/${bookId}/${chapter}/`;
-    
     https.get(url, (res) => {
       let data = '';
-      
-      if (res.statusCode !== 200) {
-        reject(new Error(`API Error ${res.statusCode}`));
-        return;
-      }
-
+      if (res.statusCode !== 200) { reject(new Error(`API Error ${res.statusCode}`)); return; }
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
-        try {
-          const json = JSON.parse(data);
-          resolve(json);
-        } catch (e) {
-          reject(e);
-        }
+        try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
       });
     }).on('error', (err) => reject(err));
   });
 };
 
-const generateBible = async () => {
-  // Aseguramos que existe la carpeta
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  }
+// --- 2. FUNCTION FOR NPM LIBRARY (Catholic Spanish) ---
+const processNpmLibrary = (targetBooks) => {
+    console.log("   📚 Loading 'biblia-de-jerusalen' library...");
+    
+    // Instantiate the Bible from the library
+    const bibleInstance = new Bible();
 
-  console.log("🚀 Starting Unified Bible Generator...");
-  console.log("📡 Connecting to Bolls.life API...");
-
-  // --- BUCLE PRINCIPAL: Recorremos cada idioma ---
-  for (const job of JOBS) {
-    console.log(`\n=========================================`);
-    console.log(`🌍 Generating version: ${job.language} (${job.versionApi})`);
-    console.log(`=========================================`);
-
-    const gospelsData = [];
+    const gospels = [];
     let globalId = 1;
 
-    for (const book of job.books) {
-      process.stdout.write(`📘 ${book.name}: `); 
-      
-      for (let i = 1; i <= book.chapters; i++) {
-        try {
-          const versesArray = await fetchChapter(job.versionApi, book.id, i);
-          
-          // --- LIMPIEZA DE TEXTO (CRUCIAL) ---
-          const chapterText = versesArray
-              .map(v => v.text)
-              .join(" ")
-              .replace(/<[^>]*>/g, '') // 1. Elimina etiquetas HTML (<br>, <i>)
-              .replace(/[0-9]/g, '');  // 2. Elimina números (Crucial para la versión KJV Inglés)
+    console.log(`   🔍 Searching for ${targetBooks.length} Gospel books...`);
 
-          gospelsData.push({
-            id: globalId++,
-            book: book.name,
-            chapter: i,
-            citation: `${book.name} ${i}`,
-            text: chapterText,
-            verse_count: versesArray.length
-          });
-          
-          process.stdout.write(`.`); 
-
-        } catch (error) {
-          console.error(`\n❌ Error ${book.name} ${i}:`, error.message);
+    // Use getBook() method to fetch each target book directly
+    targetBooks.forEach(bookName => {
+        const bookObj = bibleInstance.getBook(bookName);
+        
+        if (!bookObj) {
+            console.warn(`   ⚠️ Book "${bookName}" not found in library`);
+            return;
         }
-      }
-      process.stdout.write(` ✅\n`); 
+
+        console.log(`   📖 Processing: ${bookName} (${bookObj.ctd_chapters} chapters)`);
+        
+        // Iterate through the chapters array
+        bookObj.chapters.forEach((chapterObj) => {
+            const chapterNum = parseInt(chapterObj.chapter, 10);
+            
+            // verses is an object with verse numbers as keys: { "1": "text...", "2": "text...", ... }
+            const versesObj = chapterObj.verses;
+            const verseNumbers = Object.keys(versesObj).sort((a, b) => parseInt(a) - parseInt(b));
+            
+            // Join all verses into a single text
+            const fullText = verseNumbers
+                .map(vNum => versesObj[vNum])
+                .join(" ");
+
+            gospels.push({
+                id: globalId++,
+                book: bookName,
+                chapter: chapterNum,
+                citation: `${bookName} ${chapterNum}`,
+                text: fullText.trim(),
+                verse_count: verseNumbers.length
+            });
+        });
+    });
+
+    return gospels;
+};
+
+// --- MAIN EXECUTION ---
+const generateBible = async () => {
+  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+
+  console.log("🚀 Starting RUAH Generator (NPM Library + API)...");
+
+  for (const job of JOBS) {
+    console.log(`\n------------------------------------------------`);
+    console.log(`🌍 Generating: ${job.language}`);
+    
+    let gospelsData = [];
+
+    // NPM LIBRARY MODE
+    if (job.mode === "NPM_LIBRARY") {
+        try {
+            gospelsData = processNpmLibrary(job.targetBooks);
+             if (gospelsData.length === 0) {
+              console.warn("⚠️ WARNING: No chapters were found. Check the book names.");
+            } else {
+              console.log(`   ✅ Success! ${gospelsData.length} Catholic chapters processed.`);
+            }
+        } catch (error) {
+            console.error("   ❌ LIBRARY ERROR:", error.message);
+        }
+    } 
+    
+    // API MODE
+    else if (job.mode === "API") {
+        let globalId = 1;
+        for (const book of job.books) {
+            process.stdout.write(`   📘 ${book.name}: `);
+            for (let i = 1; i <= book.chapters; i++) {
+                try {
+                    const versesArray = await fetchChapterFromApi(job.versionApi, book.id, i);
+                    
+                    // Specific cleanup for KJV (remove Strong numbers and HTML)
+                    const chapterText = versesArray
+                        .map(v => v.text)
+                        .join(" ")
+                        .replace(/<[^>]*>/g, '') 
+                        .replace(/[0-9]/g, '');
+
+                    gospelsData.push({
+                        id: globalId++,
+                        book: book.name,
+                        chapter: i,
+                        citation: `${book.name} ${i}`,
+                        text: chapterText,
+                        verse_count: versesArray.length
+                    });
+                    process.stdout.write(`.`);
+                } catch (error) {
+                    process.stdout.write(`x`);
+                }
+            }
+            process.stdout.write(` ✅\n`);
+        }
     }
 
-    // Guardar archivo
-    fs.writeFileSync(job.filename, JSON.stringify(gospelsData, null, 2));
-    console.log(`💾 Saved: ${job.filename}`);
+    // Save final file
+    if (gospelsData.length > 0) {
+                fs.writeFileSync(job.filename, JSON.stringify(gospelsData, null, 2));
+        console.log(`   💾 File saved: ${job.filename}`);
+    }
   }
 
-  console.log("\n✨ ALL DONE! Both languages generated successfully.");
+  console.log("\n✨ PROCESS COMPLETED. Your Catholic database is ready.");
 };
 
 generateBible();

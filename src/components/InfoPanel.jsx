@@ -19,6 +19,12 @@ export default function InfoPanel({ language = 'es', onClose }) {
           ]
         },
         {
+          heading: 'Biblia usada',
+          paragraphs: [
+            'Esta aplicación utiliza la Biblia Católica, concretamente la Biblia de Jerusalén. Las lecturas provistas en la sección en español provienen de esta versión.'
+          ]
+        },
+        {
           heading: 'Cómo usarlo',
           paragraphs: [
             'Pulsa el botón principal "Abrir el Libro" y la app mostrará un capítulo al azar. Lee despacio, reflexiona unos minutos y pregúntate: ¿qué me está diciendo esto hoy? Repite si quieres una nueva lectura.',
@@ -34,6 +40,15 @@ export default function InfoPanel({ language = 'es', onClose }) {
           heading: 'Invitación',
           paragraphs: [
             'Si esta pequeña práctica te ayuda, compártela con otros. Si buscas más apoyo espiritual, considera hablar con un párroco o acompañante espiritual de confianza.'
+          ]
+        }
+        ,
+        {
+          heading: 'Créditos',
+          paragraphs: [
+            'Autor del sitio: Marcos Ángel Ayala Blanco — https://github.com/marcosayalab',
+            'Parroquia: Parroquia de Santa María y San Sebastián, Estepa, Sevilla — https://www.archisevillasiempreadelante.org/santa-maria-y-san-sebastian-de-estepa-parroquia-alumbrada-por-el-espiritu-santo/',
+            'Facebook: https://www.facebook.com/p/Parroquia-de-Santa-Maria-y-San-Sebasti%C3%A1n-de-Estepa-100064536586298/?locale=es_ES'
           ]
         }
       ]
@@ -54,6 +69,12 @@ export default function InfoPanel({ language = 'es', onClose }) {
           ]
         },
         {
+          heading: 'Bible used',
+          paragraphs: [
+            'This application uses the Catholic Bible — specifically the Biblia de Jerusalén. Readings provided in the Spanish interface come from this edition.'
+          ]
+        },
+        {
           heading: 'How to use',
           paragraphs: [
             'Press the main "Open the Book" button and the app will display a random chapter. Read slowly, reflect for a few minutes and ask: what is this saying to me today? Press again for a new reading if desired.'
@@ -69,6 +90,15 @@ export default function InfoPanel({ language = 'es', onClose }) {
           heading: 'An invitation',
           paragraphs: [
             'If this practice helps you, share it with others. If you seek deeper support, consider speaking with a trusted parish priest or spiritual director.'
+          ]
+        }
+        ,
+        {
+          heading: 'Credits',
+          paragraphs: [
+            'Site author: Marcos Ángel Ayala Blanco — https://github.com/marcosayalab',
+            'Parish: Parroquia de Santa María y San Sebastián, Estepa, Sevilla — https://www.archisevillasiempreadelante.org/santa-maria-y-san-sebastian-de-estepa-parroquia-alumbrada-por-el-espiritu-santo/',
+            'Facebook: https://www.facebook.com/p/Parroquia-de-Santa-Maria-y-San-Sebasti%C3%A1n-de-Estepa-100064536586298/?locale=es_ES'
           ]
         }
       ]

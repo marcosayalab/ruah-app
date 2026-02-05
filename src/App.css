@@ -45,8 +45,8 @@
 }
 
 .logo-img {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2.8rem;
+  height: 2.8rem;
   border-radius: 50%;
 }
 
@@ -236,6 +236,15 @@
   font-family: var(--font-sans);
   font-size: 0.9rem;
   color: var(--color-text-muted);
+}
+
+/* Parish logo styling: remove white background using blend mode and make responsive */
+.parish-logo {
+  height: clamp(64px, 12vw, 128px);
+  width: auto;
+  margin: 6px auto;
+  display: block;
+  mix-blend-mode: multiply;
 }
 
 /* ===== Animations ===== */
