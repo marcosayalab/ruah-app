@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRandomGospel } from './hooks/useRandomGospel';
 import './App.css';
 import logoSvg from '/ruah.svg';
+import parishLogo from './assets/logo-parroquia-SantaMariaYSanSebastianEstepa.jpg';
 import InfoPanel from './components/InfoPanel';
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
       button: 'Abrir el Libro',
       newReading: 'Nueva Lectura',
       footer: 'Un momento de reflexión con los Evangelios',
+      creditsAuthor: 'Desarrollado por',
+      creditsParish: 'Parroquia',
+      creditsFacebook: 'Síguenos en Facebook'
     },
     en: {
       tagline: '"The wind blows where it wishes, and you hear its sound, but you do not know where it comes from or where it goes."',
@@ -29,10 +33,21 @@ function App() {
       button: 'Open the Book',
       newReading: 'New Reading',
       footer: 'A moment of reflection with the Gospels',
+      creditsAuthor: 'Developed by',
+      creditsParish: 'Parish',
+      creditsFacebook: 'Follow us on Facebook'
     },
   };
 
   const t = texts[language];
+
+  const authorName = 'Marcos Ángel Ayala Blanco';
+  const authorGithub = 'https://github.com/marcosayalab';
+  const parish = {
+    name: 'Parroquia de Santa María y San Sebastián, Estepa, Sevilla',
+    url: 'https://www.archisevillasiempreadelante.org/santa-maria-y-san-sebastian-de-estepa-parroquia-alumbrada-por-el-espiritu-santo/',
+    facebook: 'https://www.facebook.com/p/Parroquia-de-Santa-Maria-y-San-Sebasti%C3%A1n-de-Estepa-100064536586298/?locale=es_ES'
+  };
 
   return (
     <div className="app">
@@ -98,7 +113,21 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>{t.footer}</p>
+        <div className="footer-content">
+          <p className="footer-parish" style={{fontWeight: 700, fontSize: '1.03rem', margin: 0, textAlign: 'center'}}>
+            <a href={parish.url} target="_blank" rel="noreferrer" style={{color: 'inherit', textDecoration: 'none', fontWeight: 700}}>{parish.name}</a>
+            {" \u00A0•\u00A0 "}
+            <a href={parish.facebook} target="_blank" rel="noreferrer" style={{color: 'inherit', textDecoration: 'underline'}}>{t.creditsFacebook}</a>
+          </p>
+
+          <div className="parish-logo-wrap" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '6px 0'}}>
+            <img src={parishLogo} alt="Parish logo" className="parish-logo" />
+          </div>
+
+          <p className="credits" style={{fontSize: '0.85rem', marginTop: '0.25rem', marginBottom: 0, color: '#666'}}>
+            {t.creditsAuthor}: <a href={authorGithub} target="_blank" rel="noreferrer" style={{color: 'inherit'}}>{authorName}</a>
+          </p>
+        </div>
       </footer>
       {showInfo && (
         <InfoPanel language={language} onClose={() => setShowInfo(false)} />
